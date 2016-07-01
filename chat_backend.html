@@ -1,0 +1,568 @@
+<!DOCTYPE html>	
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Admin-BackEnd Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+	
+
+    	body {
+  padding-top: 0px;
+  font-size: 12px;
+  color: #777;
+  background: #f9f9f9;
+  font-family: 'Open Sans',sans-serif;
+  margin-top:21px;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+.alert {
+background-color: #EEEEEE;
+   width:750px;
+margin-left: 0px   ;
+padding-bottom: 6px;
+ padding-top: 10px;
+}
+
+.friend-list {
+  list-style: none;
+margin-left: -30px;
+}
+
+.friend-list li {
+  border-bottom: 0.5px solid #eee;
+}
+
+.friend-list li a img {
+  float: left;
+  width: 45px;
+  height: 45px;
+  margin-right: 0px;
+}
+
+ .friend-list li a {
+  position: relative;
+  display: block;
+  padding: 10px;
+  transition: all .2s ease;
+  -webkit-transition: all .2s ease;
+  -moz-transition: all .2s ease;
+  -ms-transition: all .2s ease;
+  -o-transition: all .2s ease;
+}
+
+.friend-list li.active a {
+  background-color: #f1f5fc;
+}
+
+.friend-list li a .friend-name, 
+.friend-list li a .friend-name:hover {
+  color: #777;
+}
+
+.friend-list li a .last-message {
+  width: 65%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.friend-list li a .time {
+  position: absolute;
+  top: 10px;
+  right: 8px;
+}
+
+small, .small {
+  font-size: 85%;
+}
+
+.friend-list li a .chat-alert {
+  position: absolute;
+  right: 8px;
+  top: 27px;
+  font-size: 10px;
+  padding: 3px 5px;
+}
+
+.chat-message {
+  padding: 20px 20px 120x;
+}
+
+.chat {
+    list-style: none;
+    margin: 20px;
+}
+
+.chat-message{
+    background: #f9f9f9;  
+}
+
+.chat li img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50em;
+  -moz-border-radius: 50em;
+  -webkit-border-radius: 50em;
+}
+
+img {
+  max-width: 100%;
+}
+
+.chat-body {
+  padding-bottom: 20px;
+}
+
+.chat li.left .chat-body {
+  margin-left: 70px;
+  background-color: #fff;
+}
+
+.chat li .chat-body {
+  position: relative;
+  font-size: 11px;
+  padding: 5px;
+  border: 1px solid #f1f5fc;
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  -moz-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+.chat li .chat-body .header {
+  padding-bottom: 5px;
+  border-bottom: 1px solid #f1f5fc;
+}
+
+.chat li .chat-body p {
+  margin: 0px;
+}
+
+.chat li.left .chat-body:before {
+  position: absolute;
+  top: 10px;
+  left: -8px;
+  display: inline-block;
+  background: #fff;
+  width: 16px;
+  height: 16px;
+  border-top: 1px solid #f1f5fc;
+  border-left: 1px solid #f1f5fc;
+  content: '';
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+}
+
+.chat li.right .chat-body:before {
+  position: absolute;
+  top: 10px;
+  right: 99998px;
+  display: inline-block;
+  background: #fff;
+  width: 16px;
+  height: 16px;
+  border-top: 1px solid #f1f5fc;
+  border-right: 1px solid #f1f5fc;
+  content: '';
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+}
+
+.chat li {
+  margin: 15px 0;
+}
+
+.chat li.right .chat-body {
+  margin-right: 70px;
+  background-color: #fff;
+}
+
+.chat-box {
+  position: fixed;
+  bottom: 0;
+  left: 444px;
+  right: 444px;
+  padding: 15px;
+  border-top: 1px solid #eee;
+  transition: all .5s ease;
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -ms-transition: all .5s ease;
+  -o-transition: all .5s ease;
+}
+
+.primary-font {
+  color: #3c8dbc;
+}
+
+a:hover, a:active, a:focus {
+  text-decoration: none;
+  outline: 0;
+}
+.cd-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+.cd-header:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.cd-header #cd-logo {
+  float: left;
+  margin: 15px 0 0 5%;
+
+}
+.cd-header #cd-logo img {
+  display: block;
+  width: 70%;
+  height: 70%;
+}
+@media only screen and (min-width: 768px) {
+  .cd-header {
+    height: 40px;
+  }
+  .cd-header #cd-logo {
+    margin: 18px 0 0 5%;
+  }
+  .cd-header #cd-logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.cd-main-nav {
+  float: right;
+  margin-right: 5%;
+  width: 44px;
+  height: 100%;
+  background: url("../img/cd-icon-menu.svg") no-repeat center center;  
+  background-size: 44px 44px;
+  cursor: pointer;
+}
+.cd-main-nav ul {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  -webkit-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  -o-transform: translateY(-100%);
+  transform: translateY(-100%);
+}
+.cd-main-nav ul.is-visible {
+  -webkit-transform: translateY(50px);
+  -moz-transform: translateY(50px);
+  -ms-transform: translateY(50px);
+  -o-transform: translateY(50px);
+  transform: translateY(50px);
+}
+.cd-main-nav a {
+  display: block;
+  height: 50px;
+  line-height: 50px;
+  padding-left: 5%;
+  background: #f0f0f0;
+  border-top: 1px solid #453c3d;
+  color:black;
+}
+@media only screen and (min-width: 768px) {
+  .cd-main-nav {
+    width: auto;
+    height: auto;
+    background: none;
+    cursor: auto;
+  }
+  .cd-main-nav ul {
+    position: static;
+    width: auto;
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -o-transform: translateY(0);
+    transform: translateY(0);
+    line-height: 70px;
+  }
+  .cd-main-nav ul.is-visible {
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -o-transform: translateY(0);
+    transform: translateY(0);
+  }
+  .cd-main-nav li {
+    display: inline-block;
+    margin-left: 1em;
+  }
+  .cd-main-nav a {
+    display: inline-block;
+    height: auto;
+    line-height: normal;
+    background: transparent;
+    padding: .6em .4em;
+    border-top: none;
+    color: #3d3536;
+    text-transform: uppercase;
+    /*font-weight: bold;*/
+    font-weight: normal;
+    font-size: 12px;
+    /*font-size: 0.875rem;*/
+    font-size: 0.975rem;
+  }
+  .no-touch .cd-main-nav a:hover {
+    color: #99a478;
+  }
+}
+q {
+    color: black;
+  }
+  .paragraph1 {
+    font-size: 18px;
+  }
+    r { cursor: pointer; }
+
+	
+	navbar_logo{height : 40px;}
+	rig {float:right;}
+	
+
+    </style>
+</head>
+<body>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<!--header -->
+
+					<header class="cd-header">	
+	<!--<div id="cd-logo"><a href="#0"><img src="img" alt="Logo"></a></div>
+										
+		<nav class="navbar navbar-default">
+			
+			<ul>
+				<!-- inser more links here 
+				<li><a href="#home"><q class="paragraph1">Home</a></li></q>
+				<li><a href="#settings"><q class="paragraph1">Settings</a></li></q>	
+                <li><a href="#logout"><q class="paragraph1">Help</a></li></q>
+				 <li><a href="#help"><q class="paragraph1">Logout</a></li></q>
+				
+			</ul> 
+		</nav> <!-- cd-main-nav -->
+		<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+		&nbsp&nbsp&nbsp&nbsp
+           <a href="index.html"><img class="img-responsive2"       
+           src="logo.png" height=40px vspace="5"></a>
+			
+			<a class="navbar-brand" href="#"><!-- to diplay name of the company --></a>
+	  
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#">Profile</a></li>
+      <li><a href="#">Settings</a></li> 
+      <li><a href="#">Logout</a></li>
+<li><a href="#"></a></li>
+<li><a href="#"></a></li>
+<li><a href="#"></a></li><li><a href="#"></a></li>	  
+    </ul>
+  </div>
+</nav>
+	</header>
+<br><br><br><!--header end -->
+
+<div class="container bootstrap snippet">
+    <div class="row">
+		<div class="col-md-4 bg-white ">
+            <div class=" row border-bottom padding-sm" style="height: 40px;">
+            	<H5>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspLogged in as : <strong>Admin 1 </strong></h5>
+				<h4><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspMembers Online</b></h4> 
+            </div>
+            
+            <!-- =============================================================== -->
+            <!-- member list -->
+            <ul class="friend-list">
+                <br><br><li class="active bounceInDown">
+                	<a href="#" class="clearfix">
+                		<img src="profile.png" alt="" class="img-circle">
+                		<div class="friend-name">	
+                			<b><h4>&nbsp&nbsp1234567890</b></h4>
+							
+							<small class="chat-alert label label-danger">1</small>
+                		</div>
+                	</a>
+                </li>
+                <li>
+                	<a href="#" class="clearfix">
+                		<img src="profile.png" alt="" class="img-circle">
+                		<div class="friend-name">	
+                			<strong><h4><b>&nbsp&nbsp7654332526<b></h4></strong>
+							<small class="chat-alert text-muted"><i class="fa fa-check"></i></small>
+                		</div>
+                		</a> 	
+                </li>     
+                <li>
+                	<a href="#" class="clearfix">
+                		<img src="profile.png" alt="" class="img-circle">
+                		<div class="friend-name">	
+                			<strong><b><h4>&nbsp&nbsp8876523142</b></h4></strong>
+							<small class="chat-alert text-muted"><i class="fa fa-check"></i></small>
+                		</div>
+                	</a>
+                </li>        
+                <li>
+                	<a href="#" class="clearfix">
+                		<img src="profile.png" alt="" class="img-circle">
+                		<div class="friend-name">	
+                			<strong><b><h4>&nbsp&nbsp9879784512</b></h4></strong>
+							<small class="chat-alert text-muted"><i class="fa fa-check"></i></small>
+                		</div>
+                	</a>
+                </li>          
+                <li>
+                	<a href="#" class="clearfix">
+                		<img src="profile.png" alt="" class="img-circle">
+                		<div class="friend-name">	
+                			<strong><b><h4>&nbsp&nbsp786698567</b></h4></strong>
+<small class="chat-alert text-muted"><i class="fa fa-check"></i></small>							
+                		</div>
+                	</a>
+                </li>
+                
+            </ul>
+		</div>
+        
+        <!--=========================================================-->
+        <!-- selected chat -->
+    	<div class="col-md-8 bg-white ">
+            <div class="chat-message">
+			<div class="alert alert-success">
+                    <strong>  
+									<div class="span4 proj-div" data-toggle="modal" data-target="#GSCCModal"><h4><r>User Name - User-Id</r></h4></div>
+									<rig><small><button type="button" class="btn btn-primary btn-xs" align="right-side">Close chat</button></small></rig>
+									<h6>Online <span class="glyphicon glyphicon-ok-sign" color="green"></span></h6>
+									
+									
+            		
+<div id="GSCCModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
+        <h4 class="modal-title" id="myModalLabel"><center>Customer Information</center></h4>
+      </div>
+      <div class="modal-body">
+        <ol>
+		<li align="left"> Name: </li>
+		<li align="left"> Address: </li>
+				<li align="left"> Email id: </li>
+		<li align="left"> Contact Number: </li></ol>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div></strong>
+                </div>
+                
+                <ul class="chat">
+                    <li class="left clearfix">
+                    	<span class="chat-img pull-left">
+                    		<img src="profile.png" alt="User Avatar">
+                    	</span>
+                    	<div class="chat-body clearfix">
+                    		<div class="header">
+                    			<strong class="primary-font">1234567890</strong>
+                    			<small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 9:40am</small>
+                    		</div>
+                    		<p>
+                    			Message typed by the user
+                    		</p>
+                    	</div>
+						
+                    </li>
+                    <li class="right clearfix">
+                    	<span class="chat-img pull-right">
+                    		<img src="profile.png" alt="User Avatar">
+                    	</span>
+                    	<div class="chat-body clearfix">
+                    		<div class="header">
+                    			<strong class="primary-font">Admin 1</strong>
+                    			<small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 9:41am</small>
+                    		</div>
+                    		<p>
+                    			Reply given to the user by the admin 
+                    		</p>
+                    	</div>
+                    </li>
+                    <li class="left clearfix">
+                        <span class="chat-img pull-left">
+                    		<img src="profile.png" alt="User Avatar">
+                    	</span>
+                    	<div class="chat-body clearfix">
+                    		<div class="header">
+                    			<strong class="primary-font">1234567890</strong>
+                    			<small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 9:41am</small>
+                    		</div>
+                    		<p>
+                    			Message typed by the user
+								</p>
+                    	</div>
+                    </li>
+                    <li class="right clearfix">
+                        <span class="chat-img pull-right">
+                    		<img src="profile.png" alt="User Avatar">
+                    	</span>
+                    	<div class="chat-body clearfix">
+                    		<div class="header">
+                    			<strong class="primary-font">Admin 1</strong>
+                    			<small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 9:42am</small>
+                    		</div>
+                    		<p>
+                    			Reply given by admin to user 
+                    		</p>
+                    	</div>
+                    </li>                    
+					<li>
+					<input class="form-control border no-shadow no-rounded" placeholder="Type your message here"></li>
+            		<span>
+					<p align="right">
+					<button type="button" class="btn btn-primary" align="right-side">Send</button>&nbsp&nbsp
+            		</p>
+					</span>
+					<span></span> 
+						
+                </ul>
+					
+            
+			</div>
+                        
+		</div>        
+	</div>
+</div>
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	
+</script>
+</body>
+</html>
